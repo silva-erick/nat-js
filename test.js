@@ -363,6 +363,8 @@ test('editDistance - jaro()', function() {
 	equal(ed.jaro('aba', 'anastácia'), 0.6296296296296297, "jaro('aba', 'anastácia')=0.6296296296296297");
 	equal(ed.jaro('aba', 'antagônica'), 0.6222222222222222, "jaro('aba', 'antagônica')=0.6222222222222222");
 	equal(ed.jaro('ama', 'pijama'), 0.5, "jaro('ama', 'pijama')=0.5");
+
+	equal(ed.jaro('impressiona', 'empreciona'), 0.7590909090909091, "jaro('impressiona', 'empreciona')=0.7272727272727273");
 });
 
 test('editDistance - jaroWinkler()', function() {
@@ -379,6 +381,8 @@ test('editDistance - jaroWinkler()', function() {
 	equal(ed.jaroWinkler('aba', 'anastácia'), 0.6666666666666667, "jaroWinkler('aba', 'anastácia')=0.6666666666666667");
 	equal(ed.jaroWinkler('aba', 'antagônica'), 0.66, "jaroWinkler('aba', 'antagônica')=0.66");
 	equal(ed.jaroWinkler('ama', 'pijama'), 0.5, "jaroWinkler('ama', 'pijama')=0.5");
+
+	equal(ed.jaroWinkler('impressiona', 'empreciona'), 0.7590909090909091, "jaroWinkler('impressiona', 'empreciona')=0.7590909090909091");
 });
 
 test('editDistance - levenshteinDistance()', function() {
@@ -395,6 +399,8 @@ test('editDistance - levenshteinDistance()', function() {
 	equal(ed.levenshteinDistance('aba', 'anastácia'), 7, "levenshteinDistance('aba', 'anastácia')=7");
 	equal(ed.levenshteinDistance('aba', 'antagônica'), 8, "levenshteinDistance('aba', 'antagônica')=8");
 	equal(ed.levenshteinDistance('ama', 'pijama'), 3, "levenshteinDistance('ama', 'pijama')=3");
+
+	equal(ed.levenshteinDistance('impressiona', 'empreciona'), 3, "levenshteinDistance('impressiona', 'empreciona')=3");
 });
 
 test('editDistance - levenshtein()', function() {
@@ -456,4 +462,5 @@ test('syllables - split()', function() {
 	equal(sy.split('piano').join('.'), 'pi.a.no', "pi.a.no");
 	equal(sy.split('saudade').join('.'), 'sau.da.de', "sau.da.de");
 	equal(sy.split('vaidade').join('.'), 'vai.da.de', "vai.da.de");
+	equal(sy.split('anhangabaú').join('.'), 'a.nhan.ga.ba.ú', "a.nhan.ga.ba.ú");
 });
