@@ -485,13 +485,19 @@ var nat = nat || (function (){
 	};
 	
 	//-------------------------------------------------------------------------
-	// split a word in its syllables
+	// split a word in its syllables (portuguese)
+	// some hints:
+	// - a syllable always contains a vowel;
+	// - this vowel can be alone (amor=a.mor), preceded by consonants
+	//   (protótipo=pro.tó.ti.po), succeed by consonant
+	//   (transporte=trans.por.te)
+	// - there can be digraphs (dígrafo, in portuguese) like [ch], [qu], [gu],
+	//   [lh], [nh], [cr], [br], [ps], [ad] and others.
 	var rxValid = /[\wáéíóúàèìòùâêêôûäëïöüçñ\-]+/i;
 	var syllables = function(){}
 	syllables.prototype = {
 		_isVowel: function(c) {
 			var res = 'aeiouáéíóúàèìòùâêêôûäëïöüãõ'.indexOf(c)>=0;
-			console.log(c + ' é vogal? ' + res);
 			return res;
 		},
 		_getChar: function(str, position) {
@@ -541,6 +547,7 @@ var nat = nat || (function (){
 				
 				if ( windowOfChars[1] == '' ) continue;
 				
+				// like in veem, leem, voo, enjoo
 				if ( (c == 'e' && windowOfChars[1] == 'e' )
 					 ||(c == 'o' && windowOfChars[1] == 'o' ) ) {
 					result.push(buffer.join(''));
@@ -548,6 +555,7 @@ var nat = nat || (function (){
 					continue;
 				}
 				
+				// like in piano
 				if ( 'iu'.indexOf(c) >= 0 ) {
 					if ( 'aeo'.indexOf(windowOfChars[1]) >= 0 ) {
 						var syl = buffer.join('');
@@ -559,8 +567,10 @@ var nat = nat || (function (){
 					}
 				}
 				
+				// non-accented vowel
 				if ( 'aeiou'.indexOf(windowOfChars[1]) >= 0 ) continue;
 				
+				// any other vowel
 				if ( this._isVowel(windowOfChars[1]) ) {
 					result.push(buffer.join(''));
 					buffer = [];
