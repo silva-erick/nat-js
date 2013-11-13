@@ -1,4 +1,4 @@
-﻿// nat.js
+// nat.js
 // a NLP (natural language processing) toolkit in javascript
 
 // a small toolkit which will help you apply some NLP techniques
@@ -424,31 +424,36 @@ test('syllables - split()', function() {
 	equal(sy.split(new Date()), null, "can't split date");
 	equal(sy.split(33), null, "can't split number");
 
-	equal(sy.split('a').join('-'), 'a', "a => a");
-	equal(sy.split('as').join('-'), 'as', "as => as");
-	equal(sy.split('alma').join('-'), 'al-ma', "alma => al-ma");
-	equal(sy.split('amparo').join('-'), 'am-pa-ro', "amparo => am-pa-ro");
-	equal(sy.split('arte').join('-'), 'ar-te', "arte => ar-te");
-	equal(sy.split('antena').join('-'), 'an-te-na', "an-te-na");
-	equal(sy.split('asteca').join('-'), 'as-te-ca', "as-te-ca");
-	equal(sy.split('avestruz').join('-'), 'a-ves-truz', "a-ves-truz");
-	equal(sy.split('transporte').join('-'), 'trans-por-te', "trans-por-te");
-	equal(sy.split('transportadora').join('-'), 'trans-por-ta-do-ra', "trans-por-ta-do-ra");
-	equal(sy.split('fantástico').join('-'), 'fan-tás-ti-co', "fan-tás-ti-co");
-	equal(sy.split('guarda-chuva').join('-'), 'guar-da---chu-va', "guar-da---chu-va");
-	equal(sy.split('achocolatado').join('-'), 'a-cho-co-la-ta-do', "a-cho-co-la-ta-do");
-	equal(sy.split('xadrez').join('-'), 'xa-drez', "xa-drez");
-	equal(sy.split('axadrezado').join('-'), 'a-xa-dre-za-do', "a-xa-dre-za-do");
-	equal(sy.split('calha').join('-'), 'ca-lha', "ca-lha");
-	equal(sy.split('abobalhado').join('-'), 'a-bo-ba-lha-do', "a-bo-ba-lha-do");
-	equal(sy.split('encrespado').join('-'), 'en-cres-pa-do', "en-cres-pa-do");
-	equal(sy.split('dragão').join('-'), 'dra-gão', "dra-gão");
-	equal(sy.split('pindamonhangaba').join('-'), 'pin-da-mo-nhan-ga-ba', "pin-da-mo-nhan-ga-ba");
-	equal(sy.split('pedra').join('-'), 'pe-dra', "pe-dra");
-	equal(sy.split('pedras').join('-'), 'pe-dras', "pe-dras");
-	equal(sy.split('tecla').join('-'), 'te-cla', "te-cla");
-	equal(sy.split('acre').join('-'), 'a-cre', "a-cre");
-	equal(sy.split('acrescentar').join('-'), 'a-cres-cen-tar', "a-cres-cen-tar");
-	equal(sy.split('voo').join('-'), 'vo-o', "vo-o");
-	equal(sy.split('ostracismo').join('-'), 'os-tra-cis-mo', "os-tra-cis-mo");
+	equal(sy.split('a').join('.'), 'a', "a");
+	equal(sy.split('as').join('.'), 'as', "as");
+	equal(sy.split('alma').join('.'), 'al.ma', "al.ma");
+	equal(sy.split('amparo').join('.'), 'am.pa.ro', "am.pa.ro");
+	equal(sy.split('arte').join('.'), 'ar.te', "ar.te");
+	equal(sy.split('antena').join('.'), 'an.te.na', "an.te.na");
+	equal(sy.split('asteca').join('.'), 'as.te.ca', "as.te.ca");
+	equal(sy.split('avestruz').join('.'), 'a.ves.truz', "a.ves.truz");
+	equal(sy.split('transporte').join('.'), 'trans.por.te', "trans.por.te");
+	equal(sy.split('transportadora').join('.'), 'trans.por.ta.do.ra', "trans.por.ta.do.ra");
+	equal(sy.split('fantástico').join('.'), 'fan.tás.ti.co', "fan.tás.ti.co");
+	equal(sy.split('guarda-chuva').join('.'), 'guar.da.-.chu.va', "guar.da.-.chu.va");
+	equal(sy.split('achocolatado').join('.'), 'a.cho.co.la.ta.do', "a.cho.co.la.ta.do");
+	equal(sy.split('xadrez').join('.'), 'xa.drez', "xa.drez");
+	equal(sy.split('axadrezado').join('.'), 'a.xa.dre.za.do', "a.xa.dre.za.do");
+	equal(sy.split('calha').join('.'), 'ca.lha', "ca.lha");
+	equal(sy.split('abobalhado').join('.'), 'a.bo.ba.lha.do', "a.bo.ba.lha.do");
+	equal(sy.split('encrespado').join('.'), 'en.cres.pa.do', "en.cres.pa.do");
+	equal(sy.split('dragão').join('.'), 'dra.gão', "dra.gão");
+	equal(sy.split('pindamonhangaba').join('.'), 'pin.da.mo.nhan.ga.ba', "pin.da.mo.nhan.ga.ba");
+	equal(sy.split('pedra').join('.'), 'pe.dra', "pe.dra");
+	equal(sy.split('pedras').join('.'), 'pe.dras', "pe.dras");
+	equal(sy.split('tecla').join('.'), 'te.cla', "te.cla");
+	equal(sy.split('acre').join('.'), 'a.cre', "a.cre");
+	equal(sy.split('acrescentar').join('.'), 'a.cres.cen.tar', "a.cres.cen.tar");
+	equal(sy.split('voo').join('.'), 'vo.o', "vo.o");
+	equal(sy.split('ostracismo').join('.'), 'os.tra.cis.mo', "os.tra.cis.mo");
+	equal(sy.split('paraguai').join('.'), 'pa.ra.guai', "pa.ra.guai");
+	equal(sy.split('paranapiacaba').join('.'), 'pa.ra.na.pi.a.ca.ba', "pa.ra.na.pi.a.ca.ba");
+	equal(sy.split('piano').join('.'), 'pi.a.no', "pi.a.no");
+	equal(sy.split('saudade').join('.'), 'sau.da.de', "sau.da.de");
+	equal(sy.split('vaidade').join('.'), 'vai.da.de', "vai.da.de");
 });
