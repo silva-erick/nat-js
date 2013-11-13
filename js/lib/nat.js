@@ -1,4 +1,4 @@
-﻿// nat.js
+// nat.js
 // a NLP (natural language processing) toolkit in javascript
 //
 // a small toolkit which will help you apply some NLP techniques
@@ -546,6 +546,17 @@ var nat = nat || (function (){
 					result.push(buffer.join(''));
 					buffer = [];
 					continue;
+				}
+				
+				if ( 'iu'.indexOf(c) >= 0 ) {
+					if ( 'aeo'.indexOf(windowOfChars[1]) >= 0 ) {
+						var syl = buffer.join('');
+						if ( syl != 'qu' && syl != 'gu' ) {
+							result.push(buffer.join(''));
+							buffer = [];
+							continue;
+						}
+					}
 				}
 				
 				if ( 'aeiou'.indexOf(windowOfChars[1]) >= 0 ) continue;
