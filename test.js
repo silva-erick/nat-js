@@ -493,6 +493,54 @@ test('charFrequency - relative()', function() {
 	equal(result['z'], 1/59, 'z: 1 ocurrence.');
 });
 
+test('wordLengthFrequency - absolute()', function() {
+	var fd = new nat.wordLengthFrequency();
+	var result = fd.absolute('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.absolute('123.456.7 abracadabra pé de cabra');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 12, 'there are 6 unique tokens on text "123.456.7 abracadabra pé de cabra" when hashing from lower property.');
+	equal(result[1], 0, '1: 0 ocurrences.');
+	equal(result[2], 2, '2: 2 ocurrences.');
+	equal(result[3], 0, '3: 0 ocurrences.');
+	equal(result[4], 0, '4: 0 ocurrences.');
+	equal(result[5], 1, '5: 1 ocurrences.');
+	equal(result[6], 0, '6: 0 ocurrences.');
+	equal(result[7], 0, '7: 0 ocurrences.');
+	equal(result[8], 0, '8: 0 ocurrences.');
+	equal(result[9], 1, '9: 1 ocurrences.');
+	equal(result[10], 0, '10: 0 ocurrences.');
+	equal(result[11], 1, '11: 1 ocurrences.');
+});
+
+test('wordLengthFrequency - relative()', function() {
+	var fd = new nat.wordLengthFrequency();
+	var result = fd.relative('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.relative('123.456.7 abracadabra pé de cabra');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 12, 'there are 6 unique tokens on text "123.456.7 abracadabra pé de cabra" when hashing from lower property.');
+	equal(result[1], 0/5, '1: 0 ocurrences.');
+	equal(result[2], 2/5, '2: 2 ocurrences.');
+	equal(result[3], 0/5, '3: 0 ocurrences.');
+	equal(result[4], 0/5, '4: 0 ocurrences.');
+	equal(result[5], 1/5, '5: 1 ocurrences.');
+	equal(result[6], 0/5, '6: 0 ocurrences.');
+	equal(result[7], 0/5, '7: 0 ocurrences.');
+	equal(result[8], 0/5, '8: 0 ocurrences.');
+	equal(result[9], 1/5, '9: 1 ocurrences.');
+	equal(result[10], 0/5, '10: 0 ocurrences.');
+	equal(result[11], 1/5, '11: 1 ocurrences.');
+});
+
 test('editDistance - jaro()', function() {
 	var ed = new nat.editDistance();
 	equal(ed.jaro('erick', 'erick'), 1, "jaro('erick', 'erick')=1");
