@@ -374,7 +374,6 @@ var nat = nat || (function (){
 		}
 	};
 
-	
 	//-------------------------------------------------------------------------
 	// charFrequency: frequency distribution
 	var charFrequency = function(){};
@@ -397,6 +396,48 @@ var nat = nat || (function (){
 				result[c] = qty;
 			}
 
+			return result;
+		},
+		// relative = absolute / total_tokens
+		relative: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			var result = this.absolute(text, opt);
+			var total = 0;
+			for(var m in result) {
+				total += result[m];
+			}
+			for(var m in result) {
+				result[m] = result[m] / total;
+			}
+			return result;
+		}
+	};
+
+	//-------------------------------------------------------------------------
+	// wordLengthFrequency: frequency distribution
+	var wordLengthFrequency = function(){};
+	wordLengthFrequency.prototype = {
+		// absolute counting
+		absolute: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			var tkz = new tokenizer();
+			var tokens = tkz.getFeatureMatrix(text, opt);
+			
+			var max = 0;
+			var result = [];
+			for(var m in tokens) {
+				max = Math.max(m.length, max);
+				var qty = (result[m.length] || 0);
+				result[m.length] = qty + tokens[m];
+			}
+			
+			for(var i = 0; i < max; i++) {
+				var qty = (result[i] || 0);
+				result[i] = qty;
+			}
+			
 			return result;
 		},
 		// relative = absolute / total_tokens
@@ -712,6 +753,7 @@ var nat = nat || (function (){
 		tokenFrequency: tokenFrequency,
 		syllableFrequency: syllableFrequency,
 		charFrequency: charFrequency,
+		wordLengthFrequency: wordLengthFrequency,
 		editDistance: editDistance,
 		syllables: syllables
 	};
