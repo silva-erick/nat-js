@@ -301,15 +301,102 @@ var nat = nat || (function (){
 	};
 	
 	//-------------------------------------------------------------------------
-	// freqDistr: frequency distribution
-	var freqDistr = function(){};
-	freqDistr.prototype = {
+	// tokenFrequency: frequency distribution
+	var tokenFrequency = function(){};
+	tokenFrequency.prototype = {
 		// absolute counting
 		absolute: function(text, opt) {
 			opt = opt || {};
 			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
 			var tkz = new tokenizer();
 			var result = tkz.getFeatureMatrix(text, opt);
+			return result;
+		},
+		// relative = absolute / total_tokens
+		relative: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			var result = this.absolute(text, opt);
+			var total = 0;
+			for(var m in result) {
+				total += result[m];
+			}
+			for(var m in result) {
+				result[m] = result[m] / total;
+			}
+			return result;
+		}
+	};
+	
+	
+	//-------------------------------------------------------------------------
+	// syllableFrequency: frequency distribution
+	var syllableFrequency = function(){};
+	syllableFrequency.prototype = {
+		// absolute counting
+		absolute: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			var tkz = new tokenizer();
+			// get unique tokens and correspond ocurrences
+			var tokens = tkz.getFeatureMatrix(text, opt);
+			
+			var result = [];
+			
+			// now let's apply the splitter
+			var sy = new nat.syllables();
+			for(var m in tokens) {
+				if (m == 'length') console.log('found length on object');
+				var sybs = sy.split(m);
+				if ( sybs == null ) continue;
+				var mult = tokens[m];
+				for(var s in sybs) {
+					var q = (result[sybs[s]] || 0) + mult;
+					result[sybs[s]] = q;
+				}
+			}
+			
+			return result;
+		},
+		// relative = absolute / total_tokens
+		relative: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			var result = this.absolute(text, opt);
+			var total = 0;
+			for(var m in result) {
+				total += result[m];
+			}
+			for(var m in result) {
+				result[m] = result[m] / total;
+			}
+			return result;
+		}
+	};
+
+	
+	//-------------------------------------------------------------------------
+	// charFrequency: frequency distribution
+	var charFrequency = function(){};
+	charFrequency.prototype = {
+		// absolute counting
+		absolute: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			
+			if ( typeof text != 'string' ) return [];
+			
+			var result = [];
+			for(var i = 0; i < text.length; i++ ) {
+				var c = text.charAt(i);
+				if ( opt.hashLower ) {
+					c = c.toLowerCase();
+				}
+				var qty = (result[c] || 0);
+				qty++;
+				result[c] = qty;
+			}
+
 			return result;
 		},
 		// relative = absolute / total_tokens
@@ -493,7 +580,7 @@ var nat = nat || (function (){
 	//   (transporte=trans.por.te)
 	// - there can be digraphs (dígrafo, in portuguese) like [ch], [qu], [gu],
 	//   [lh], [nh], [cr], [br], [ps], [ad] and others.
-	var rxValid = /[\wáéíóúàèìòùâêêôûäëïöüçñ\-]+/i;
+	var rxValid = /[a-záéíóúàèìòùâêêôûäëïöüçñ\-]+/i;
 	var syllables = function(){}
 	syllables.prototype = {
 		_isVowel: function(c) {
@@ -622,7 +709,9 @@ var nat = nat || (function (){
 		util: util,
 		scanner: scanner,
 		tokenizer: tokenizer,
-		freqDistr: freqDistr,
+		tokenFrequency: tokenFrequency,
+		syllableFrequency: syllableFrequency,
+		charFrequency: charFrequency,
 		editDistance: editDistance,
 		syllables: syllables
 	};
