@@ -303,31 +303,30 @@ test('tokenizer - getFeatureMatrix()', function() {
 	equal(result['dog'], 1, 'dog: 1 ocurrence.');
 });
 
-test('freqDistr - relative()', function() {
-	var fd = new nat.freqDistr();
-	var result = fd.relative('');	
+test('tokenFrequency - absolute()', function() {
+	var fd = new nat.tokenFrequency();
+	var result = fd.absolute('');	
 	equal(result.length, 0, 'there are no tokens on text "".');
 
-	result = fd.relative('123.456.7 The quick brown fox jumps over the lazy dog.');
+	result = fd.absolute('123.456.7 The quick brown fox jumps over the lazy dog.');
 	var qty = 0;
 	for(var m in result) {
 		qty++;
 	}
 	equal(qty, 10, 'there are 10 unique tokens on text "123.456.7 The quick brown fox jumps over the lazy dog." when hashing from lower property.');
-	equal(result['123.456.7'], 1/11, '123.456.7: 1 ocurrence.');
-	equal(result['the'], 2/11, 'the: 2 ocurrences.');
-	equal(result['quick'], 1/11, 'quick: 1 ocurrence.');
-	equal(result['brown'], 1/11, 'brown: 1 ocurrence.');
-	equal(result['fox'], 1/11, 'fox: 1 ocurrence.');
-	equal(result['jumps'], 1/11, 'jumps: 1 ocurrence.');
-	equal(result['over'], 1/11, 'over: 1 ocurrence.');
-	equal(result['lazy'], 1/11, 'lazy: 1 ocurrence.');
-	equal(result['dog'], 1/11, 'dog: 1 ocurrence.');
-
+	equal(result['123.456.7'], 1, '123.456.7: 1 ocurrence.');
+	equal(result['the'], 2, 'the: 2 ocurrences.');
+	equal(result['quick'], 1, 'quick: 1 ocurrence.');
+	equal(result['brown'], 1, 'brown: 1 ocurrence.');
+	equal(result['fox'], 1, 'fox: 1 ocurrence.');
+	equal(result['jumps'], 1, 'jumps: 1 ocurrence.');
+	equal(result['over'], 1, 'over: 1 ocurrence.');
+	equal(result['lazy'], 1, 'lazy: 1 ocurrence.');
+	equal(result['dog'], 1, 'dog: 1 ocurrence.');
 });
 
-test('freqDistr - relative()', function() {
-	var fd = new nat.freqDistr();
+test('tokenFrequency - relative()', function() {
+	var fd = new nat.tokenFrequency();
 	var result = fd.relative('');	
 	equal(result.length, 0, 'there are no tokens on text "".');
 
@@ -346,7 +345,152 @@ test('freqDistr - relative()', function() {
 	equal(result['over'], 1/11, 'over: 1 ocurrence.');
 	equal(result['lazy'], 1/11, 'lazy: 1 ocurrence.');
 	equal(result['dog'], 1/11, 'dog: 1 ocurrence.');
+});
 
+test('syllableFrequency - absolute()', function() {
+	var fd = new nat.syllableFrequency();
+	var result = fd.absolute('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.absolute('123.456.7 abracadabra pé de cabra');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 6, 'there are 6 unique tokens on text "123.456.7 abracadabra pé de cabra" when hashing from lower property.');
+	equal(result['a'], 1, 'a: 1 ocurrences.');
+	equal(result['bra'], 3, 'bra: 3 ocurrences.');
+	equal(result['ca'], 2, 'ca: 2 ocurrences.');
+	equal(result['da'], 1, 'da: 1 ocurrences.');
+	equal(result['pé'], 1, 'pé: 1 ocurrences.');
+	equal(result['de'], 1, 'de: 1 ocurrences.');
+});
+
+test('syllableFrequency - relative()', function() {
+	var fd = new nat.syllableFrequency();
+	var result = fd.relative('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.relative('123.456.7 abracadabra pé de cabra');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 6, 'there are 6 unique tokens on text "123.456.7 abracadabra pé de cabra" when hashing from lower property.');
+	equal(result['a'], 1/9, 'a: 1 ocurrences.');
+	equal(result['bra'], 3/9, 'bra: 3 ocurrences.');
+	equal(result['ca'], 2/9, 'ca: 2 ocurrences.');
+	equal(result['da'], 1/9, 'da: 1 ocurrences.');
+	equal(result['pé'], 1/9, 'pé: 1 ocurrences.');
+	equal(result['de'], 1/9, 'de: 1 ocurrences.');
+});
+
+test('charFrequency - absolute()', function() {
+	var fd = new nat.charFrequency();
+	var result = fd.absolute('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.absolute('123.456.789-90 The quick brown fox jumps over the lazy dog.');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 39, 'there are 39 unique tokens on text "123.456.789-90 The quick brown fox jumps over the lazy dog." when hashing from lower property.');
+	equal(result[' '], 9, ' : 9 ocurrence.');
+	equal(result['.'], 3, '.: 3 ocurrence.');
+	equal(result['-'], 1, '-: 1 ocurrence.');
+
+	equal(result['1'], 1, '1: 1 ocurrence.');
+	equal(result['2'], 1, '2: 1 ocurrence.');
+	equal(result['3'], 1, '3: 1 ocurrence.');
+	equal(result['4'], 1, '4: 1 ocurrence.');
+	equal(result['5'], 1, '5: 1 ocurrence.');
+	equal(result['6'], 1, '6: 1 ocurrence.');
+	equal(result['7'], 1, '7: 1 ocurrence.');
+	equal(result['8'], 1, '8: 1 ocurrence.');
+	equal(result['9'], 2, '9: 2 ocurrence.');
+	equal(result['0'], 1, '0: 1 ocurrence.');
+	
+	equal(result['a'], 1, 'a: 1 ocurrence.');
+	equal(result['b'], 1, 'b: 1 ocurrence.');
+	equal(result['c'], 1, 'c: 1 ocurrence.');
+	equal(result['d'], 1, 'd: 1 ocurrence.');
+	equal(result['e'], 3, 'e: 3 ocurrence.');
+	equal(result['f'], 1, 'f: 1 ocurrence.');
+	equal(result['g'], 1, 'g: 1 ocurrence.');
+	equal(result['h'], 2, 'h: 2 ocurrence.');
+	equal(result['i'], 1, 'i: 1 ocurrence.');
+	equal(result['j'], 1, 'j: 1 ocurrence.');
+	equal(result['k'], 1, 'k: 1 ocurrence.');
+	equal(result['l'], 1, 'l: 1 ocurrence.');
+	equal(result['m'], 1, 'm: 1 ocurrence.');
+	equal(result['n'], 1, 'n: 1 ocurrence.');
+	equal(result['o'], 4, 'o: 4 ocurrence.');
+	equal(result['p'], 1, 'p: 1 ocurrence.');
+	equal(result['q'], 1, 'q: 1 ocurrence.');
+	equal(result['r'], 2, 'r: 2 ocurrence.');
+	equal(result['s'], 1, 's: 1 ocurrence.');
+	equal(result['t'], 2, 't: 2 ocurrence.');
+	equal(result['u'], 2, 'u: 2 ocurrence.');
+	equal(result['v'], 1, 'v: 1 ocurrence.');
+	equal(result['w'], 1, 'w: 1 ocurrence.');
+	equal(result['x'], 1, 'x: 1 ocurrence.');
+	equal(result['y'], 1, 'y: 1 ocurrence.');
+	equal(result['z'], 1, 'z: 1 ocurrence.');
+});
+
+test('charFrequency - relative()', function() {
+	var fd = new nat.charFrequency();
+	var result = fd.relative('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.relative('123.456.789-90 The quick brown fox jumps over the lazy dog.');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 39, 'there are 39 unique tokens on text "123.456.789-90 The quick brown fox jumps over the lazy dog." when hashing from lower property.');
+	equal(result[' '], 9/59, ' : 9 ocurrence.');
+	equal(result['.'], 3/59, '.: 3 ocurrence.');
+	equal(result['-'], 1/59, '-: 1 ocurrence.');
+
+	equal(result['1'], 1/59, '1: 1 ocurrence.');
+	equal(result['2'], 1/59, '2: 1 ocurrence.');
+	equal(result['3'], 1/59, '3: 1 ocurrence.');
+	equal(result['4'], 1/59, '4: 1 ocurrence.');
+	equal(result['5'], 1/59, '5: 1 ocurrence.');
+	equal(result['6'], 1/59, '6: 1 ocurrence.');
+	equal(result['7'], 1/59, '7: 1 ocurrence.');
+	equal(result['8'], 1/59, '8: 1 ocurrence.');
+	equal(result['9'], 2/59, '9: 2 ocurrence.');
+	equal(result['0'], 1/59, '0: 1 ocurrence.');
+	
+	equal(result['a'], 1/59, 'a: 1 ocurrence.');
+	equal(result['b'], 1/59, 'b: 1 ocurrence.');
+	equal(result['c'], 1/59, 'c: 1 ocurrence.');
+	equal(result['d'], 1/59, 'd: 1 ocurrence.');
+	equal(result['e'], 3/59, 'e: 3 ocurrence.');
+	equal(result['f'], 1/59, 'f: 1 ocurrence.');
+	equal(result['g'], 1/59, 'g: 1 ocurrence.');
+	equal(result['h'], 2/59, 'h: 2 ocurrence.');
+	equal(result['i'], 1/59, 'i: 1 ocurrence.');
+	equal(result['j'], 1/59, 'j: 1 ocurrence.');
+	equal(result['k'], 1/59, 'k: 1 ocurrence.');
+	equal(result['l'], 1/59, 'l: 1 ocurrence.');
+	equal(result['m'], 1/59, 'm: 1 ocurrence.');
+	equal(result['n'], 1/59, 'n: 1 ocurrence.');
+	equal(result['o'], 4/59, 'o: 4 ocurrence.');
+	equal(result['p'], 1/59, 'p: 1 ocurrence.');
+	equal(result['q'], 1/59, 'q: 1 ocurrence.');
+	equal(result['r'], 2/59, 'r: 2 ocurrence.');
+	equal(result['s'], 1/59, 's: 1 ocurrence.');
+	equal(result['t'], 2/59, 't: 2 ocurrence.');
+	equal(result['u'], 2/59, 'u: 2 ocurrence.');
+	equal(result['v'], 1/59, 'v: 1 ocurrence.');
+	equal(result['w'], 1/59, 'w: 1 ocurrence.');
+	equal(result['x'], 1/59, 'x: 1 ocurrence.');
+	equal(result['y'], 1/59, 'y: 1 ocurrence.');
+	equal(result['z'], 1/59, 'z: 1 ocurrence.');
 });
 
 test('editDistance - jaro()', function() {
