@@ -173,6 +173,12 @@ var nat = nat || (function (){
 					type = TokenTypes.ALPHALIKE;
 					buffer.push(this.getChar());
 				}
+				// pt example: d'água
+				// en example: there's
+				// fr example: d'argent
+				else if ( c == "'" && util.isAlpha(this.seeChar(1)) ) {
+					buffer.push(this.getChar());
+				}
 				else {
 					loop = false;
 				}
@@ -331,7 +337,10 @@ var nat = nat || (function (){
 	
 	//-------------------------------------------------------------------------
 	// syllableFrequency: frequency distribution
-	var syllableFrequency = function(){};
+	var syllableFrequency = function(opt){
+		opt = opt || {};
+		this.language = opt.language;
+	};
 	syllableFrequency.prototype = {
 		// absolute counting
 		absolute: function(text, opt) {
@@ -344,7 +353,7 @@ var nat = nat || (function (){
 			var result = [];
 			
 			// now let's apply the splitter
-			var sy = new nat.syllables();
+			var sy = new nat.syllables(this.language);
 			for(var m in tokens) {
 				if (m == 'length') console.log('found length on object');
 				var sybs = sy.split(m);
@@ -621,9 +630,19 @@ var nat = nat || (function (){
 	//   (transporte=trans.por.te)
 	// - there can be digraphs (dígrafo, in portuguese) like [ch], [qu], [gu],
 	//   [lh], [nh], [cr], [br], [ps], [ad] and others.
-	var rxValid = /[a-záéíóúàèìòùâêêôûäëïöüçñ\-]+/i;
-	var syllables = function(){}
-	syllables.prototype = {
+	var syllables = function(language){
+		var res = null;
+		switch(language) {
+			case 'pt':
+				res = new ptSyllables();
+				break;
+		}
+		return res;
+	}
+	
+	var ptSyllables = function(){}
+	ptSyllables.prototype = {
+		rxValid: /[a-záéíóúàèìòùâêêôûäëïöüçñ\-]+/i,
 		_isVowel: function(c) {
 			var res = 'aeiouáéíóúàèìòùâêêôûäëïöüãõ'.indexOf(c)>=0;
 			return res;
@@ -636,7 +655,7 @@ var nat = nat || (function (){
 		},
 		split: function(str) {
 			if ( typeof str != 'string' ) return null;
-			if ( !rxValid.test(str) ) return null;
+			if ( !this.rxValid.test(str) ) return null;
 			
 			if ( str.indexOf('-') >= 0 ) {
 				var parts = str.split('-');

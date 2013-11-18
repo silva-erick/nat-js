@@ -249,8 +249,8 @@ test('tokenizer - execute()', function() {
 	var result = tkz.execute('');	
 	equal(result.length, 0, 'there are no tokens on text "".');
 
-	result = tkz.execute('123.456.7 The quick brown fox jumps over the lazy dog.');
-	equal(result.length, 11, 'there are 11 tokens on text "123.456.7 The quick brown fox jumps over the lazy dog.".');
+	result = tkz.execute("123.456.7 The quick brown fox jumps over the lazy dog. don't panic.");
+	equal(result.length, 14, 'there are 14 tokens on text "123.456.7 The quick brown fox jumps over the lazy dog. don\'t panic.".');
 	equal(result[0].value, '123.456.7', '0: 123.456.7');
 	equal(result[1].value, 'The', '1: The');
 	equal(result[2].value, 'quick', '2: quick');
@@ -262,6 +262,9 @@ test('tokenizer - execute()', function() {
 	equal(result[8].value, 'lazy', '8: lazy');
 	equal(result[9].value, 'dog', '9: dog');
 	equal(result[10].value, '.', '10: .');
+	equal(result[11].value, "don't", "11: don't");
+	equal(result[12].value, 'panic', '12: panic');
+	equal(result[13].value, '.', '13: .');
 });
 
 test('tokenizer - getFeatureMatrix()', function() {
@@ -348,7 +351,9 @@ test('tokenFrequency - relative()', function() {
 });
 
 test('syllableFrequency - absolute()', function() {
-	var fd = new nat.syllableFrequency();
+	var fd = new nat.syllableFrequency({
+		language: 'pt'
+	});
 	var result = fd.absolute('');	
 	equal(result.length, 0, 'there are no tokens on text "".');
 
@@ -367,7 +372,9 @@ test('syllableFrequency - absolute()', function() {
 });
 
 test('syllableFrequency - relative()', function() {
-	var fd = new nat.syllableFrequency();
+	var fd = new nat.syllableFrequency({
+		language: 'pt'
+	});
 	var result = fd.relative('');	
 	equal(result.length, 0, 'there are no tokens on text "".');
 
@@ -613,8 +620,8 @@ test('editDistance - levenshtein()', function() {
 	equal(ed.levenshtein('impressiona', 'empreciona'), 0.7272727272727273, "levenshtein('impressiona', 'empreciona')=0.7272727272727273");
 });
 
-test('syllables - split()', function() {
-	var sy = new nat.syllables();
+test('syllables[pt] - split()', function() {
+	var sy = new nat.syllables('pt');
 	equal(sy.split(null), null, "can't split null");
 	equal(sy.split([]), null, "can't split array");
 	equal(sy.split(function(){}), null, "can't split function");
