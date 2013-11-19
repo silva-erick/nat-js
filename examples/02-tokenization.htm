@@ -35,18 +35,20 @@ THE SOFTWARE.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <title>nat.js</title>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="./js/lib/nat.js"></script>
+  <title>Example 02 - Tokenization</title>
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+  <script src="../js/lib/jquery-1.9.0.min.js"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/qunit/1.12.0/qunit.min.js"></script>-->
+  <script src="../js/lib/nat.js"></script>
 </head>
 <body>
-<h1>nat.js</h1>
+<h1>Example 02 - Tokenization</h1>
 
 <textarea id="txtResultado" rows="20" cols="100"></textarea>
 
 <script>
 $(document).ready(function(){
-	$.get( "./data/machado.txt", function( data ) {
+	$.get( "../data/machado.txt", function( data ) {
 		var sample = data;
 		
 		var tz = new nat.tokenizer();
@@ -55,7 +57,7 @@ $(document).ready(function(){
 		res.push(tokens.length + '\n');
 		for(var t in tokens){
 			var tkn = tokens[t];
-			res.push('   ' + tkn.value + ' [' + tkn.type + ']\n');
+			res.push('   ' + tkn.value + ' [' + nat.util.getType(tkn.type) + ']\n');
 		}
 		
 		$('#txtResultado').val(res.join(''));

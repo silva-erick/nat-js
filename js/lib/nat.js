@@ -72,6 +72,21 @@ var nat = nat || (function (){
 		isSymbol: function (v) {
 			if (v == '' || v == null || v.toLowerCase == null  ) return false;
 			return '.,;:+-—–*<>ªº()[]{},=?!@#$%&=’´`~^"“”\'/|¢£¬†'.indexOf(v)>= 0;
+		},
+		getType: function(v) {
+			var result = '';
+			switch(v) {
+				case TokenTypes.EOF : result = 'EOF'; break;
+				case TokenTypes.UNKNOW: result = 'UNKNOW'; break;
+				case TokenTypes.SYMBOL: result = 'SYMBOL'; break;
+				case TokenTypes.EOL: result = 'EOL'; break;
+				case TokenTypes.BLANK: result = 'BLANK'; break;
+				case TokenTypes.ALPHA: result = 'ALPHA'; break;
+				case TokenTypes.ALPHALIKE: result = 'ALPHALIKE'; break;
+				case TokenTypes.NUMBER: result = 'NUMBER'; break;
+				case TokenTypes.NUMBERLIKE: result = 'NUMBERLIKE'; break;
+			}
+			return result;
 		}
 	}
 	
@@ -98,6 +113,9 @@ var nat = nat || (function (){
 	};
 	
 	scanner.prototype = {
+		getPosition: function() {
+			return this._position;
+		},
 		// is it the end of the text?
 		isEnd: function(offset) {
 			offset = offset || 0;
@@ -116,20 +134,25 @@ var nat = nat || (function (){
 			return this._text.charAt(this._position + offset);
 		},
 		_eofState: function(c) {
+			var pos = this.getPosition()-1;
 			return {
 				value: '',
 				lower: '',
-				type: TokenTypes.EOF
+				type: TokenTypes.EOF,
+				position: pos
 			};
 		},
 		_symbolState: function(c) {
+			var pos = this.getPosition()-1;
 			return {
 				value: c,
 				lower: c,
-				type: TokenTypes.SYMBOL
+				type: TokenTypes.SYMBOL,
+				position: pos
 			};
 		},
 		_eolState: function(c) {
+			var pos = this.getPosition()-1;
 			// let's ignore subsequent EOL
 			while (util.isEndOfLine(this.seeChar())) {
 				this.getChar();
@@ -137,10 +160,12 @@ var nat = nat || (function (){
 			return {
 				value: '',
 				lower: '',
-				type: TokenTypes.EOL
+				type: TokenTypes.EOL,
+				position: pos
 			};
 		},
 		_blankState: function(c) {
+			var pos = this.getPosition()-1;
 			// let's ignore subsequent blanks
 			while (util.isBlank(this.seeChar())) {
 				this.getChar();
@@ -148,10 +173,12 @@ var nat = nat || (function (){
 			return {
 				value: ' ',
 				lower: ' ',
-				type: TokenTypes.BLANK
+				type: TokenTypes.BLANK,
+				position: pos
 			};
 		},
 		_alphaState: function(c) {
+			var pos = this.getPosition()-1;
 			var type = TokenTypes.ALPHA;
 			var buffer = [c];
 			var loop = true;
@@ -187,10 +214,12 @@ var nat = nat || (function (){
 			return {
 				value: value,
 				lower: value.toLowerCase(),
-				type: type
+				type: type,
+				position: pos
 			};
 		},
 		_numberState: function(c) {
+			var pos = this.getPosition()-1;
 			var type = TokenTypes.NUMBER;
 			var buffer = [c];
 			var loop = true;
@@ -221,7 +250,8 @@ var nat = nat || (function (){
 			return {
 				value: value,
 				lower: value.toLowerCase(),
-				type: type
+				type: type,
+				position: pos
 			};
 		},
 		// getToken
@@ -230,7 +260,8 @@ var nat = nat || (function (){
 			var result = {
 				value: c,
 				lower: c,
-				type: TokenTypes.UNKNOWN
+				type: TokenTypes.UNKNOWN,
+				position: this.getPosition()
 			};
 			
 			// basic state machine
@@ -424,6 +455,43 @@ var nat = nat || (function (){
 	};
 
 	//-------------------------------------------------------------------------
+	// firstLetterFrequency: frequency distribution
+	var firstLetterFrequency = function(){};
+	firstLetterFrequency.prototype = {
+		// absolute counting
+		absolute: function(text, opt) {
+			var tkz = new tokenizer();
+			tokens = tkz.execute(text);
+			// c
+			var result = [];
+			for(var i in tokens) {
+				var tkn = tokens[i];
+				if ( tkn.lower.length == 0 ) continue;
+				var letter = tkn.lower.charAt(0);
+				if ( ! util.isAlpha(letter) ) continue;
+				var qty = (result[letter] || 0);
+				qty++;
+				result[letter] = qty;
+			}
+			return result;
+		},
+		// relative = absolute / total_tokens
+		relative: function(text, opt) {
+			opt = opt || {};
+			opt.hashLower = opt.hashLower == null? true : opt.hashLower;
+			var result = this.absolute(text, opt);
+			var total = 0;
+			for(var m in result) {
+				total += result[m];
+			}
+			for(var m in result) {
+				result[m] = result[m] / total;
+			}
+			return result;
+		}
+	};
+
+	//-------------------------------------------------------------------------
 	// wordLengthFrequency: frequency distribution
 	var wordLengthFrequency = function(){};
 	wordLengthFrequency.prototype = {
@@ -439,6 +507,7 @@ var nat = nat || (function (){
 			for(var m in tokens) {
 				max = Math.max(m.length, max);
 				var qty = (result[m.length] || 0);
+				if ( m.length == 0 ) continue;
 				result[m.length] = qty + tokens[m];
 			}
 			
@@ -772,6 +841,7 @@ var nat = nat || (function (){
 		tokenFrequency: tokenFrequency,
 		syllableFrequency: syllableFrequency,
 		charFrequency: charFrequency,
+		firstLetterFrequency: firstLetterFrequency,
 		wordLengthFrequency: wordLengthFrequency,
 		editDistance: editDistance,
 		syllables: syllables

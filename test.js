@@ -500,6 +500,50 @@ test('charFrequency - relative()', function() {
 	equal(result['z'], 1/59, 'z: 1 ocurrence.');
 });
 
+
+test('firstLetterFrequency - absolute()', function() {
+	var fd = new nat.firstLetterFrequency();
+	var result = fd.absolute('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.absolute('123.456.789-90 The quick brown fox jumps over the lazy dog.');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 8, 'there are 8 letters');
+	equal(result['t'], 2, ' : 2 words.');
+	equal(result['b'], 1, 'b: 1 ocurrence.');
+	equal(result['d'], 1, 'd: 1 ocurrence.');
+	equal(result['f'], 1, 'f: 1 ocurrence.');
+	equal(result['j'], 1, 'j: 1 ocurrence.');
+	equal(result['l'], 1, 'l: 1 ocurrence.');
+	equal(result['o'], 1, 'o: 1 ocurrence.');
+	equal(result['q'], 1, 'q: 1 ocurrence.');
+});
+
+test('firstLetterFrequency - relative()', function() {
+	var fd = new nat.firstLetterFrequency();
+	var result = fd.relative('');	
+	equal(result.length, 0, 'there are no tokens on text "".');
+
+	result = fd.relative('123.456.789-90 The quick brown fox jumps over the lazy dog.');
+	var qty = 0;
+	for(var m in result) {
+		qty++;
+	}
+	equal(qty, 8, 'there are 8 letters');
+	equal(result['t'], 2/9, 't: 2 words.');
+	equal(result['b'], 1/9, 'b: 1 ocurrence.');
+	equal(result['d'], 1/9, 'd: 1 ocurrence.');
+	equal(result['f'], 1/9, 'f: 1 ocurrence.');
+	equal(result['j'], 1/9, 'j: 1 ocurrence.');
+	equal(result['l'], 1/9, 'l: 1 ocurrence.');
+	equal(result['o'], 1/9, 'o: 1 ocurrence.');
+	equal(result['q'], 1/9, 'q: 1 ocurrence.');
+});
+
+
 test('wordLengthFrequency - absolute()', function() {
 	var fd = new nat.wordLengthFrequency();
 	var result = fd.absolute('');	
