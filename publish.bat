@@ -1,1 +1,0 @@
-xcopy *.* c:\inetpub\wwwroot\nat\*.* /S /EXCLUDE:.gitignore+publish.bat+.gitattributes
